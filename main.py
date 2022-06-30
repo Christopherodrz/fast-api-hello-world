@@ -1,6 +1,7 @@
 # Python
 import imp
 from lib2to3.pgen2 import grammar
+from msilib import schema
 from pickletools import OpcodeInfo
 from typing import Optional
 from enum import Enum
@@ -47,6 +48,17 @@ class Person(BaseModel):
     )
     hair_color: Optional[HairColor] = Field(default=None)
     is_married: Optional[bool] = Field(default=None)
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "first_name": "CHRISTOPHER",
+                "last_name": "RODRIGUEZ RODRIGUEZ",
+                "age": 30,
+                "hair_color": "black",
+                "is_married": True,
+            }
+        }
 
 
 class Location(BaseModel):
