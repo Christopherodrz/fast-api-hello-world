@@ -8,7 +8,7 @@ from typing import Optional
 from pydantic import BaseModel
 
 # FastAPI
-from fastapi import FastAPI, Query, Body
+from fastapi import FastAPI, Path, Query, Body
 
 
 # from models.person import Person
@@ -43,9 +43,34 @@ def create_person(person: Person = Body(...)):
 
 @app.get("/person/detail")
 def show_person(
-    name: Optional[str] = Query(None, min_length=1, max_length=50),
+    name: Optional[str] = Query(
+        None,
+        min_length=1,
+        max_length=50,
+        title="Name",
+        description="It's between 1 and 50 characters!",
+    ),
     age: int = Query(
-        ..., ge=18, le=120, title="Alert", description="isnt in the age range!"
+        ...,
+        ge=18,
+        le=120,
+        title="Age",
+        description="isnt in the age range!",
     ),
 ):
     return {name: age}
+
+
+# Validations: Path Parameters
+
+
+@app.get("/person/detail/{person_id}")
+def show_person(
+    person_id: int = Path(
+        ...,
+        gt=0,
+        title="Id",
+        description="Can not be less than 1!",
+    )
+):
+    return {person_id: "It exists!"}
